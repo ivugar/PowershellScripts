@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Автокликер</string>
+    <string name="service_desc">Нажимает в точке, отмеченной прицелом, с заданным интервалом. Ничего не читает и не отправляет.</string>
+</resources>
