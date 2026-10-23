@@ -3,12 +3,16 @@ package com.ivugar.autoclicker;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.text.InputType;
+import android.view.WindowInsets;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -30,9 +34,44 @@ public class MainActivity extends Activity {
         int pad = (int) (16 * getResources().getDisplayMetrics().density);
         SharedPreferences prefs = getSharedPreferences(PREFS, MODE_PRIVATE);
 
+        // Своя шапка вместо ActionBar: на Android 15 окно рисуется под системными панелями,
+        // поэтому отступы берём из WindowInsets.
+        LinearLayout screen = new LinearLayout(this);
+        screen.setOrientation(LinearLayout.VERTICAL);
+
+        TextView header = new TextView(this);
+        header.setText(R.string.app_name);
+        header.setTextSize(22);
+        header.setTextColor(Color.WHITE);
+        header.setBackgroundColor(0xFF212121);
+        header.setPadding(pad, pad, pad, pad);
+        screen.addView(header);
+
+        ScrollView scroll = new ScrollView(this);
+        screen.addView(scroll, new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 0, 1f));
+
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
         root.setPadding(pad, pad, pad, pad);
+        scroll.addView(root);
+
+        screen.setOnApplyWindowInsetsListener((v, insets) -> {
+            int top, bottom, left, right;
+            if (Build.VERSION.SDK_INT >= 30) {
+                android.graphics.Insets i = insets.getInsets(
+                        WindowInsets.Type.systemBars() | WindowInsets.Type.ime());
+                top = i.top; bottom = i.bottom; left = i.left; right = i.right;
+            } else {
+                top = insets.getSystemWindowInsetTop();
+                bottom = insets.getSystemWindowInsetBottom();
+                left = insets.getSystemWindowInsetLeft();
+                right = insets.getSystemWindowInsetRight();
+            }
+            header.setPadding(pad + left, pad + top, pad + right, pad);
+            scroll.setPadding(left, 0, right, bottom);
+            return insets;
+        });
 
         status = new TextView(this);
         status.setTextSize(16);
@@ -77,7 +116,7 @@ public class MainActivity extends Activity {
                 + "Автокликер → ⋮ → «Разрешить доступ к настройкам ограниченного доступа».");
         root.addView(help);
 
-        setContentView(root);
+        setContentView(screen);
     }
 
     @Override
