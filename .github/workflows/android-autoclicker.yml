@@ -28,10 +28,24 @@ jobs:
         with:
           gradle-version: '8.14.3'
 
-      - name: Build debug APK
+      - name: Create signing key
         run: |
-          gradle --no-daemon assembleDebug
-          cp app/build/outputs/apk/debug/app-debug.apk autoclicker.apk
+          echo "SIGNING_PASSWORD=$(openssl rand -hex 16)" >> "$GITHUB_ENV"
+          echo "SIGNING_STORE=$RUNNER_TEMP/autoclicker.jks" >> "$GITHUB_ENV"
+
+      - name: Build release APK
+        run: |
+          keytool -genkeypair -keystore "$SIGNING_STORE" -storepass "$SIGNING_PASSWORD" \
+            -keypass "$SIGNING_PASSWORD" -alias autoclicker -keyalg RSA -keysize 2048 \
+            -validity 10000 -dname "CN=AutoClicker"
+          gradle --no-daemon assembleRelease
+          cp app/build/outputs/apk/release/app-release.apk autoclicker.apk
+
+      - name: Verify APK
+        run: |
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          "$BT/apksigner" verify --verbose autoclicker.apk
+          "$BT/aapt2" dump badging autoclicker.apk | head -5
 
       - uses: actions/upload-artifact@v4
         with:
