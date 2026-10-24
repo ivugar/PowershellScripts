@@ -20,9 +20,9 @@
 - `app/src/main/java/com/ivugar/autoclicker/ClickService.java` — сервис спец. возможностей:
   рисует прицел и панель (`TYPE_ACCESSIBILITY_OVERLAY`, отдельного разрешения на оверлей не нужно)
   и нажимает через `dispatchGesture`. Пока идут клики, прицел становится «прозрачным» для касаний.
-- `app/src/main/java/com/ivugar/autoclicker/MainActivity.java` — экран настроек со своей шапкой
-  и отступами по `WindowInsets` (на Android 15 окно рисуется под системными панелями)
+- `app/src/main/java/com/ivugar/autoclicker/MainActivity.java` — экран настроек
   (интервал в мс, минимум 20; число кликов, 0 — бесконечно), хранится в `SharedPreferences`.
+  Шапка своя, отступы берутся из `WindowInsets`: на Android 15 окно рисуется под системными панелями.
 - Java, без AndroidX, minSdk 24, targetSdk 35, AGP 8.7.3, Gradle 8.14.3 (без wrapper —
   Gradle ставит workflow).
 
