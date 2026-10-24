@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - 'AndroidAutoClicker/**'
+      - '!AndroidAutoClicker/**/*.md'
       - '.github/workflows/android-autoclicker.yml'
   workflow_dispatch:
 
