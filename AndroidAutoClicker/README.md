@@ -4,7 +4,7 @@
 (▶/■ — старт/стоп, ✥ — перетащить панель, ⚙ — настройки, ✕ — скрыть).
 Нажимает в центре прицела с заданным интервалом; можно ограничить число кликов.
 
-**Скачать APK:** https://github.com/ivugar/PowershellScripts/releases/download/autoclicker-latest/autoclicker.apk
+**Скачать APK:** https://github.com/ivugar/UsefullScripts/releases/download/autoclicker-latest/autoclicker.apk
 
 Проверено: устанавливается и работает на телефоне Xiaomi (HyperOS).
 
